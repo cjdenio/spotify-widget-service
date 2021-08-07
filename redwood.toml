@@ -7,7 +7,7 @@
 
 [web]
   port = 8910
-  apiProxyPath = "/.redwood/functions"
+  apiProxyPath = "/api"
   includeEnvironmentVariables = ["SPOTIFY_CLIENT_ID"]
 [api]
   port = 8911

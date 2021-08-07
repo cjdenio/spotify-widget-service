@@ -5,9 +5,14 @@
   "dependencies": {
     "@redwoodjs/api": "0.35.2",
     "axios": "^0.21.1",
+    "cookie": "^0.4.1",
+    "luxon": "^2.0.1",
+    "nanoid": "^3.1.23",
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
+    "@types/cookie": "^0.4.1",
+    "@types/luxon": "^1.27.1",
     "@types/spotify-web-api-node": "^5.0.3"
   }
 }

@@ -12,7 +12,7 @@ const App = () => (
     <RedwoodProvider>
       <RedwoodApolloProvider>
         <ChakraProvider
-          theme={extendTheme({ config: { initialColorMode: 'dark' } })}
+          theme={extendTheme({ config: { initialColorMode: 'light' } })}
         >
           <Routes />
         </ChakraProvider>

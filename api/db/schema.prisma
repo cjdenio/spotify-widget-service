@@ -8,15 +8,17 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
 model User {
-  id                  Int     @id @default(autoincrement())
-  email               String  @unique
-  spotifyToken        String
-  spotifyRefreshToken String
-  tokens              Token[]
+  id     Int     @id @default(autoincrement())
+  name   String?
+  email  String  @unique
+  tokens Token[]
+
+  widgetToken String @unique
+
+  spotifyToken           String
+  spotifyRefreshToken    String
+  spotifyTokenExpiration DateTime?
 }
 
 model Token {
