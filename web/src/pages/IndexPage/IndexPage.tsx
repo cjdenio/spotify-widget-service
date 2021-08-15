@@ -153,7 +153,7 @@ const LoggedOut = () => {
         colorScheme="blue"
         size="lg"
         onClick={() =>
-          (window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:8910/api/oauthCallback&scope=user-read-email%20user-read-playback-state`)
+          (window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.SPOTIFY_REDIRECT_URI}&scope=user-read-email%20user-read-playback-state`)
         }
         rightIcon={<FiArrowRight />}
       >

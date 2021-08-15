@@ -30,7 +30,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
   const spotify = new Spotify({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: 'http://localhost:8910/api/oauthCallback',
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
   })
 
   try {
