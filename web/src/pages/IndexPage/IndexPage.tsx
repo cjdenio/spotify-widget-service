@@ -4,6 +4,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Alert,
   Badge,
   Box,
   Button,
@@ -11,12 +12,14 @@ import {
   Container,
   Flex,
   Heading,
+  Link,
   Spinner,
   Text,
   Tooltip,
 } from '@chakra-ui/react'
-import { useMutation, useQuery } from '@redwoodjs/web'
+import { useMutation, useQuery } from '@apollo/client'
 import React from 'react'
+import { RiExternalLinkLine, RiHeadphoneLine } from 'react-icons/ri'
 
 import { FiArrowRight } from 'react-icons/fi'
 
@@ -32,15 +35,30 @@ const LoggedIn = ({
   }
   refetch: () => unknown
 }) => {
+  const { data } = useQuery(
+    gql`
+      {
+        viewer {
+          widget {
+            isPlaying
+            song
+            artist
+          }
+        }
+      }
+    `,
+    { pollInterval: 30000 }
+  )
   const [shuffleToken] = useMutation(gql`
     mutation {
       shuffleWidgetToken
     }
   `)
+
   return (
     <>
       <Container mt={10}>
-        <Flex justify="space-between" align="center" mb={10} px={2}>
+        <Flex justify="space-between" align="center" mb={3} px={2}>
           <Text>
             <Text fontWeight="bold" as="span">
               Logged in as
@@ -60,6 +78,28 @@ const LoggedIn = ({
           </Button>
         </Flex>
 
+        {data?.viewer?.widget?.isPlaying && (
+          <Alert mb={10} variant="left-accent">
+            <Flex px={2} alignItems="center">
+              <RiHeadphoneLine style={{ marginRight: '10px' }} size={20} />
+              <Text>
+                Listening to{' '}
+                <Link
+                  href={data.viewer.widget.songLink}
+                  color="blue.500"
+                  fontWeight="bold"
+                >
+                  {data.viewer.widget.song}
+                </Link>{' '}
+                by{' '}
+                <Text fontWeight="bold" display="inline">
+                  {data.viewer.widget.artist}
+                </Text>
+              </Text>
+            </Flex>
+          </Alert>
+        )}
+
         <Heading mb={5} size="md" textAlign="center">
           Get your widget up and running
         </Heading>
@@ -75,7 +115,8 @@ const LoggedIn = ({
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              <Code>{`<iframe src="https://calebden.io/widget?code=${user.widgetToken}" />`}</Code>
+              <Text fontWeight="bold">Coming soon!</Text>
+              <Code textDecoration="line-through">{`<iframe src="${process.env.HOST}/widget?token=${user.widgetToken}" />`}</Code>
             </AccordionPanel>
           </AccordionItem>
 
@@ -89,10 +130,8 @@ const LoggedIn = ({
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              <Text fontWeight="bold">Coming soon!</Text>
+              <Code textDecoration="line-through">{`${process.env.HOST}/api/widget?token=${user.widgetToken}" />`}</Code>
             </AccordionPanel>
           </AccordionItem>
 
@@ -106,9 +145,19 @@ const LoggedIn = ({
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              <Code>{`{
-                hi
-              }`}</Code>
+              <Box mb={2}>
+                <Link href={`/api/graphql`}>
+                  {process.env.HOST}/api/graphql
+                </Link>
+              </Box>
+              <Code display="block" whiteSpace="pre" p={1}>{`{
+  widget(token: "${user.widgetToken}") {
+    isPlaying
+    song
+    songLink
+    artist
+  }
+}`}</Code>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
