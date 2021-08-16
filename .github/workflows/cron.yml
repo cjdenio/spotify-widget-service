@@ -2,6 +2,7 @@ name: Cron
 on:
   schedule:
     - cron: '* * * * *'
+  workflow_dispatch:
 jobs:
   cron:
     name: Cron
