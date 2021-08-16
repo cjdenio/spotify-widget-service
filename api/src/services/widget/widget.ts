@@ -23,7 +23,10 @@ export const fetchWidget = async (user: User): Promise<Widget> => {
     return JSON.parse(cached)
   }
 
-  return await fetchWidgetWithoutCache(user)
+  const widget = await fetchWidgetWithoutCache(user)
+  await redis.set(`widget:${user.id}`, JSON.stringify(widget))
+
+  return widget
 }
 
 export const fetchWidgetWithoutCache = async (
