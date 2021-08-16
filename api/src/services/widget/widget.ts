@@ -19,6 +19,8 @@ export const fetchWidget = async (user: {
   const spotify = new Spotify({
     accessToken: user.spotifyToken,
     refreshToken: user.spotifyRefreshToken,
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
   })
 
   if (
@@ -41,6 +43,8 @@ export const fetchWidget = async (user: {
           .toJSDate(),
       },
     })
+
+    spotify.setAccessToken(newToken.body.access_token)
   }
 
   const track = await spotify.getMyCurrentPlayingTrack()
