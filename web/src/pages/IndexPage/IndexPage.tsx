@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { useMutation, useQuery } from '@apollo/client'
 import React from 'react'
-import { RiExternalLinkLine, RiHeadphoneLine } from 'react-icons/ri'
+import { RiHeadphoneLine } from 'react-icons/ri'
 
 import { FiArrowRight } from 'react-icons/fi'
 
@@ -42,6 +42,7 @@ const LoggedIn = ({
           widget {
             isPlaying
             song
+            songLink
             artist
           }
         }
