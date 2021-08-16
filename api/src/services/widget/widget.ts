@@ -1,7 +1,11 @@
 import { db } from 'src/lib/db'
-import Spotify from 'spotify-web-api-node'
-import { DateTime } from 'luxon'
 import { logger } from 'src/lib/logger'
+
+import { DateTime } from 'luxon'
+import Spotify from 'spotify-web-api-node'
+import Redis from 'ioredis'
+
+import { User } from '@prisma/client'
 
 interface Widget {
   isPlaying: boolean
@@ -10,12 +14,21 @@ interface Widget {
   artist?: string
 }
 
-export const fetchWidget = async (user: {
-  id: number
-  spotifyToken: string
-  spotifyRefreshToken: string
-  spotifyTokenExpiration?: Date
-}): Promise<Widget | undefined> => {
+export const fetchWidget = async (user: User): Promise<Widget> => {
+  // Try to pull from the cache
+  const redis = new Redis(process.env.REDIS_URL)
+
+  const cached = await redis.get(`widget:${user.id}`)
+  if (cached) {
+    return JSON.parse(cached)
+  }
+
+  return await fetchWidgetWithoutCache(user)
+}
+
+export const fetchWidgetWithoutCache = async (
+  user: User
+): Promise<Widget | undefined> => {
   const spotify = new Spotify({
     accessToken: user.spotifyToken,
     refreshToken: user.spotifyRefreshToken,

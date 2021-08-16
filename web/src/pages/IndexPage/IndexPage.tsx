@@ -48,7 +48,7 @@ const LoggedIn = ({
         }
       }
     `,
-    { pollInterval: 30000 }
+    { pollInterval: 5000 }
   )
   const [shuffleToken] = useMutation(gql`
     mutation {
@@ -59,47 +59,49 @@ const LoggedIn = ({
   return (
     <>
       <Container mt={10}>
-        <Flex justify="space-between" align="center" mb={3} px={2}>
-          <Text>
-            <Text fontWeight="bold" as="span">
-              Logged in as
-            </Text>{' '}
-            <Text decoration="underline" as="span">
-              {user.name}
-            </Text>{' '}
-          </Text>
+        <Box mb={10}>
+          <Flex justify="space-between" align="center" mb={3} px={2}>
+            <Text>
+              <Text fontWeight="bold" as="span">
+                Logged in as
+              </Text>{' '}
+              <Text decoration="underline" as="span">
+                {user.name}
+              </Text>{' '}
+            </Text>
 
-          <Button
-            onClick={() => {
-              document.cookie = 'token='
-              refetch()
-            }}
-          >
-            Log out
-          </Button>
-        </Flex>
+            <Button
+              onClick={() => {
+                document.cookie = 'token='
+                refetch()
+              }}
+            >
+              Log out
+            </Button>
+          </Flex>
 
-        {data?.viewer?.widget?.isPlaying && (
-          <Alert mb={10} variant="left-accent">
-            <Flex px={2} alignItems="center">
-              <RiHeadphoneLine style={{ marginRight: '10px' }} size={20} />
-              <Text>
-                Listening to{' '}
-                <Link
-                  href={data.viewer.widget.songLink}
-                  color="blue.500"
-                  fontWeight="bold"
-                >
-                  {data.viewer.widget.song}
-                </Link>{' '}
-                by{' '}
-                <Text fontWeight="bold" display="inline">
-                  {data.viewer.widget.artist}
+          {data?.viewer?.widget?.isPlaying && (
+            <Alert variant="left-accent">
+              <Flex px={2} alignItems="center">
+                <RiHeadphoneLine style={{ marginRight: '10px' }} size={20} />
+                <Text>
+                  Listening to{' '}
+                  <Link
+                    href={data.viewer.widget.songLink}
+                    color="blue.500"
+                    fontWeight="bold"
+                  >
+                    {data.viewer.widget.song}
+                  </Link>{' '}
+                  by{' '}
+                  <Text fontWeight="bold" display="inline">
+                    {data.viewer.widget.artist}
+                  </Text>
                 </Text>
-              </Text>
-            </Flex>
-          </Alert>
-        )}
+              </Flex>
+            </Alert>
+          )}
+        </Box>
 
         <Heading mb={5} size="md" textAlign="center">
           Get your widget up and running
@@ -125,14 +127,16 @@ const LoggedIn = ({
             <h2>
               <AccordionButton>
                 <Box flex="1" textAlign="left">
-                  REST API <Badge colorScheme="red">Advanced</Badge>
+                  HTTP API <Badge colorScheme="orange">Intermediate</Badge>
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              <Text fontWeight="bold">Coming soon!</Text>
-              <Code textDecoration="line-through">{`${process.env.HOST}/api/widget?token=${user.widgetToken}" />`}</Code>
+              <Link
+                href={`/api/widget?token=${user.widgetToken}`}
+                color="blue.500"
+              >{`${process.env.HOST}/api/widget?token=${user.widgetToken}`}</Link>
             </AccordionPanel>
           </AccordionItem>
 
@@ -146,10 +150,12 @@ const LoggedIn = ({
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              <Box mb={2}>
-                <Link href={`/api/graphql`}>
+              <Box mb={5}>
+                Send the following GraphQL query to{' '}
+                <Link href={`/api/graphql`} color="blue.500">
                   {process.env.HOST}/api/graphql
                 </Link>
+                :
               </Box>
               <Code display="block" whiteSpace="pre" p={1}>{`{
   widget(token: "${user.widgetToken}") {
@@ -164,7 +170,7 @@ const LoggedIn = ({
         </Accordion>
 
         <Text px={2} mt={3} color="gray.500">
-          Your widget code is{' '}
+          Your widget token is{' '}
           <Text as="span" fontWeight="bold">
             {user.widgetToken}
           </Text>
