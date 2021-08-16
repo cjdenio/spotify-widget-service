@@ -8,4 +8,4 @@ jobs:
     name: Cron
     runs-on: ubuntu-latest
     steps:
-      - run: curl https://spotify-widget.calebden.io/api/cron?token=${{ secrets.CRON_TOKEN }}
+      - run: 'curl -qfL "https://spotify-widget.calebden.io/api/cron?token=${{ secrets.CRON_TOKEN }}"'
